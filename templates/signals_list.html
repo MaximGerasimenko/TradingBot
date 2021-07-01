@@ -4,18 +4,17 @@
 
 {% block content %}
 
-{% if all is True %}
+{% if all  %}
 <h1>List of all saved signals</h1>
 	{% if signals %}
-	{{signals}}
+		{{ signals }}
 	{% else %}
 		<h3>Cant load signals list. Maybe is empty.</h3>
 	{% endif %}
 {% endif %}
 
-{% if newest is True %}
+
 <h1>List of all newest signals</h1>
-{% endif %}
 
 {% endblock %}
 

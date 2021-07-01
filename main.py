@@ -32,8 +32,7 @@ Main Page
 @app.route('/signals/all', methods=['GET'])
 @app.route('/signals/all/', methods=['GET'])
 def index_signals_all():
-    signals = TestSignal.query.order_by(TestSignal.date).all()
-    return render_template('signals_list.html', signals=signals, all=True)
+    return render_template('signals_list.html', signals=TestSignal.query.order_by(TestSignal.date).all(), all=True)
 
 
 """
@@ -70,10 +69,13 @@ Webhook
 @app.route('/webhook/', methods=['POST'])
 def webhook():
     if request.method == 'POST':
-        js = json.load(request.json)
         try:
-            db.session.add(TestSignal(title='Testing', text=js))
+            print('Got new signal')
+            db.session.add(TestSignal(title='Testing', text=json.load(request.json)))
+            print('Committing')
             db.session.commit()
+            print(json.load(request.json))
+            print(TestSignal.query.last())
             return 'success', 200
         except:
             print('ERROR while adding WebHook into the DB.')
