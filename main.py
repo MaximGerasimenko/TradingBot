@@ -1,6 +1,7 @@
 from flask import Flask, request, abort, render_template, url_for
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+import json
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -26,9 +27,20 @@ def index():
 
 
 """
+Main Page 
+"""
+@app.route('/signals/all', methods=['GET'])
+@app.route('/signals/all/', methods=['GET'])
+def index_signals_all():
+    signals = TestSignal.query.order_by(TestSignal.date).all()
+    return render_template('signals_list.html', signals=signals, all=True)
+
+
+"""
 Main API page 
 """
 @app.route('/api', methods=['GET'])
+@app.route('/api/', methods=['GET'])
 def index_api():
     return render_template('api_page.html')
 
@@ -37,6 +49,7 @@ def index_api():
 Binance API page 
 """
 @app.route('/api/binance', methods=['GET'])
+@app.route('/api/binance/', methods=['GET'])
 def index_api_binance():
     return render_template('api_binance.html')
 
@@ -45,6 +58,7 @@ def index_api_binance():
 WebHook API page 
 """
 @app.route('/api/webhook', methods=['GET'])
+@app.route('/api/webhook/', methods=['GET'])
 def index_api_webhook():
     return 'WebhookAPI'
 
@@ -53,14 +67,16 @@ def index_api_webhook():
 Webhook
 """
 @app.route('/webhook', methods=['POST'])
+@app.route('/webhook/', methods=['POST'])
 def webhook():
     if request.method == 'POST':
-        print(request.json)
+        js = json.load(request.json)
         try:
-            db.session.add(TestSignal(title='Testing', text=request.json))
+            db.session.add(TestSignal(title='Testing', text=js))
             db.session.commit()
             return 'success', 200
         except:
+            print('ERROR while adding WebHook into the DB.')
             return abort(400)
     else:
         abort(400)
