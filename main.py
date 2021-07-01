@@ -1,5 +1,6 @@
 from flask import Flask, request, abort, render_template, url_for
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime
 import json
 
@@ -70,15 +71,15 @@ Webhook
 def webhook():
     if request.method == 'POST':
         try:
+            print(json.load(request.json))
             print('Got new signal')
             db.session.add(TestSignal(title='Testing', text=json.load(request.json)))
             print('Committing')
             db.session.commit()
-            print(json.load(request.json))
             print(TestSignal.query.last())
             return 'success', 200
-        except:
-            print('ERROR while adding WebHook into the DB.')
+        except SQLAlchemyError as e:
+            print(str(e.__dict__['orig']))
             return abort(400)
     else:
         abort(400)
