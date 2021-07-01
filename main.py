@@ -71,15 +71,12 @@ Webhook
 def webhook():
     if request.method == 'POST':
         try:
-            print(json.load(request.json))
-            print('Got new signal')
-            db.session.add(TestSignal(title='Testing', text=json.load(request.json)))
-            print('Committing')
+            db.session.add(TestSignal(title='Testing', text=json.dumps(request.json)))
             db.session.commit()
-            print(TestSignal.query.last())
             return 'success', 200
         except SQLAlchemyError as e:
-            print(str(e.__dict__['orig']))
+            error = str(e.__dict__['orig'])
+            print(error)
             return abort(400)
     else:
         abort(400)

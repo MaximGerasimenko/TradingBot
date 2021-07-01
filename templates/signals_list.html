@@ -7,7 +7,9 @@
 {% if all  %}
 <h1>List of all saved signals</h1>
 	{% if signals %}
-		{{ signals }}
+		{% for signal in signals %}
+			ID-{{signal.id}} | ID-{{signal.title}} | ID-{{signal.text}} | ID-{{signal.date}}
+		{% endfor %}
 	{% else %}
 		<h3>Cant load signals list. Maybe is empty.</h3>
 	{% endif %}
