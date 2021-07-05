@@ -6,7 +6,7 @@
 
 <section class="content">
 	<section class="signals">
-	{% if signals|length == 0 %}
+	{% if signals|length > 0 %}
 		<h2>Сигналы с 1Ч. Статистика и общая информация.</h1>
 		{% if last_signal %}
 			<section class="last_signal_info">
