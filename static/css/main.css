@@ -5,9 +5,60 @@
 }
 
 :root{
-    --background_color: #8470FF;
+	--black: black;
+	--color_1: #4C3DB3;
+	--color_2: #FFBA8A;
+	--color_3: #8470FF;
+	--link_color: #54FF7A;
+	--link_hover: #C1E851;
+	--red_pale: #EA9D5F;
+	--red_light: #FF5652;
+	--green_light: #54FF7A;
+	--green_hover: #C1E851;
+    --background_color: #FFDE66;
+}
+a{
+	font-weight: 800;
+	color: var(--link_color);
+	text-decoration: none;
+}
+a:hover{
+	color: var(--link_hover);
+}
+table{
+	border-collapse: collapse;
+	width: 100%;
+}
+tr{
+	font-weight: 800;
+}
+table, th, td{
+	border: 1px solid var(--black);
 }
 
 body{
+	padding: 0 2em;
     background: var(--background_color);
+}
+header{
+	padding: 1em;
+	border-radius: 0 0 15px 15px;
+	background-color: var(--red_pale);
+	display: flex;
+	align-items: center;
+}
+nav a{
+	padding: 0 1em 0 0;
+	font-size: 30px;
+}
+nav.links{
+	margin: 0 1em;
+	display: inherit;
+}
+nav.signals{
+	margin: 0 0 0 auto;
+	display: inherit;
+}
+section.content{
+	padding: 1em 0 0 1em;
 }

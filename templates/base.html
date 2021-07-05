@@ -11,6 +11,21 @@
 </head>
 <body>
 
+<header>
+	<h1>COMPLEX TRADING BOT</h1>
+	<nav class="links">
+		<a href="{{ url_for('index') }}">HOME</a>
+		<a href="{{ url_for('index_api') }}">API</a>
+	</nav>
+	<nav class="signals">
+		<a href="{{ url_for('index_signals_statistics') }}">STATISTICS</a>
+		<a href="{{ url_for('index_signals_5m') }}">5m</a>
+		<a href="{{ url_for('index_signals_15m') }}">15m</a>
+		<a href="{{ url_for('index_signals_30m') }}">30m</a>
+		<a href="{{ url_for('index_signals_1h') }}">1h</a>
+	</nav>
+</header>
+
 {% block content %}{% endblock %}
 
 {% block js_includes %}{% endblock %}
