@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block title %} Сигналы с 15м. Статистика и данные. {% endblock %}
+
+{% block content %}
+
+<section class="content">
+	<section class="signals">
+	{% if signals|length > 0 %}
+		<h2>Сигналы с 15м. Статистика и общая информация.</h1>
+		<br>
+		{% if last_signal %}
+			<section class="last_signal_info">
+				<section class="signal_analitycs">
+					<h2>Аналитика последнего сигнала:</h2>
+
+					<h4 class="price">Цена закрытия свечи: {{last_signal.price}}</h4>
+
+					<br>
+					<h4 class="signal {% if last_signal.signal == 'short' %}bg_red{% else %}bg_green{% endif %}">Сигнал: {% if last_signal.signal == 'short' %} Сигнал в ШОРТ {% else %} Сигнал в ЛОНГ {% endif %}</h4>
+					<h4 class="balance {% if last_signal.balance > last_signal.price %}bg_red{% else %}bg_green{% endif %}">Линия баланса: {% if last_signal.balance > last_signal.price %} Цена под балансом (ШОРТ в приоритете) {% else %} Цена над балансом (ЛОНГ в приоритете) {% endif %}</h4>
+					<br>
+
+					<h2>Вывод:</h2>
+					{% if last_signal.signal == 'short' and last_signal.balance > last_signal.price %}
+						<h4 class="decision bg_red">Оба сигнала совпадают в ШОРТ. Стоит торговать на понижение</h4>
+					{% elif last_signal.signal == 'long' and last_signal.balance <= last_signal.price %}
+						<h4 class="decision bg_green">Оба сигнала совпадают в ЛОНГ. Стоит торговать на повышение</h4>
+					{% else %}
+						<h4 class="decision">Сигнал не системный. Рекомендуется пропустить.</h4>
+					{% endif %}
+				</section>
+
+				<br><br>
+				<h3>Информация последнего сигнала:</h2>
+				<table>
+					<tr>
+						<th>TYPE</th>
+						<th>SIGNAL</th>
+						<th>PRICE</th>
+						<th>BALANCE</th>
+						<th>LOW</th>
+						<th>HIGHT</th>
+						<th>DATE</th>
+					</tr>
+					<tr>
+						<td>{{last_signal.type}}</td>
+						<td class={% if last_signal.signal == 'long' %}bg_green{% else %}bg_red{% endif %}>{{last_signal.signal}}</td>
+						<td>{{last_signal.price}}</td>
+						<td class={% if last_signal.balance >= last_signal.price %}bg_red{% else %}bg_green{% endif %}>{{last_signal.balance|round(2)}}</td>
+						<td>{{last_signal.price_low}}</td>
+						<td>{{last_signal.price_hight}}</td>
+						<td>{{last_signal.date.strftime('%H:%M | %Y-%m-%d')}}</td>
+					</tr>
+				</table>
+			</section>
+		{% else %}
+			<section class="error">
+				<h1>ERROR</h1>
+				<h3>Не могу загрузить данные из DB.</h3>
+			</section>
+		{% endif %}
+
+		<br><br>
+
+		<section class="signals_info">
+			<h3>Список всех сигналов этого ТФ:</h3>
+			<table>
+				<tr>
+					<th>TYPE</th>
+					<th>SIGNAL</th>
+					<th>PRICE</th>
+					<th>BALANCE</th>
+					<th>LOW</th>
+					<th>HIGHT</th>
+					<th>DATE</th>
+				</tr>
+				{% for signal in signals %}
+				<tr>
+					<td>{{signal.type}}</td>
+					<td class={% if signal.signal == 'long' %}bg_green{% else %}bg_red{% endif %}>{{signal.signal}}</td>
+					<td>{{signal.price}}</td>
+					<td class={% if signal.balance >= signal.price %}bg_red{% else %}bg_green{% endif %}>{{signal.balance|round(2)}}</td>
+					<td>{{signal.price_low}}</td>
+					<td>{{signal.price_hight}}</td>
+					<td>{{signal.date.strftime('%H:%M | %Y-%m-%d')}}</td>
+				</tr>
+				{% endfor %}
+			</table>
+		</section>
+	{% else %}
+		<section class="error">
+			<h1>ERROR</h1>
+			<h3>Нет сигналов. Подожди сигнала с 15м из TradingView.</h3>
+		</section>
+	{% endif %}
+	</section>
+</section>
+
+{% endblock %}
+
+{% block js_includes %}{% endblock %}

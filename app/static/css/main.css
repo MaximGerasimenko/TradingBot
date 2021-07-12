@@ -17,6 +17,13 @@
 	--green_hover: #C1E851;
     --background_color: #FFDE66;
 }
+
+.bg_green{
+	background-color: var(--green_light);
+}
+.bg_red{
+	background-color: var(--red_light)
+}
 a{
 	font-weight: 800;
 	color: var(--link_color);
@@ -34,6 +41,7 @@ tr{
 }
 table, th, td{
 	border: 1px solid var(--black);
+	text-align: center;
 }
 
 body{

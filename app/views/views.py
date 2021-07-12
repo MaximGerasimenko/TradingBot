@@ -1,89 +1,9 @@
-from flask import Flask, request, abort, render_template, url_for
-from flask_sqlalchemy import SQLAlchemy
+from app import app
+
+from flask import request, abort, render_template
 from sqlalchemy.exc import SQLAlchemyError
-from datetime import datetime
-import json
 
-app = Flask(__name__)
-
-"""
-Database settings
-"""
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
-
-
-# Testing signals DB
-class TestSignal(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    title = db.Column(db.String(50), nullable=False)
-    text = db.Column(db.Text, nullable=False)
-    date = db.Column(db.DateTime, default=datetime.utcnow)
-
-    def __repr__(self):
-        return '<TestSignal %r>' % self.id
-
-
-# Signals for 5m
-class Signals5m(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    type = db.Column(db.String(10), nullable=False)
-    signal = db.Column(db.String(5), nullable=False)
-    price = db.Column(db.Float, nullable=False)
-    price_hight = db.Column(db.Float, nullable=False)
-    price_low = db.Column(db.Float, nullable=False)
-    balance = db.Column(db.Float, nullable=False)
-    date = db.Column(db.DateTime, default=datetime.utcnow)
-
-    def __repr__(self):
-        return '<TestSignal %r>' % self.id
-
-
-# Signals for 15m
-class Signals15m(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    type = db.Column(db.String(10), nullable=False)
-    signal = db.Column(db.String(5), nullable=False)
-    price = db.Column(db.Float, nullable=False)
-    price_hight = db.Column(db.Float, nullable=False)
-    price_low = db.Column(db.Float, nullable=False)
-    balance = db.Column(db.Float, nullable=False)
-    date = db.Column(db.DateTime, default=datetime.utcnow)
-
-    def __repr__(self):
-        return '<TestSignal %r>' % self.id
-
-
-# Signals for 30m
-class Signals30m(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    type = db.Column(db.String(10), nullable=False)
-    signal = db.Column(db.String(5), nullable=False)
-    price = db.Column(db.Float, nullable=False)
-    price_hight = db.Column(db.Float, nullable=False)
-    price_low = db.Column(db.Float, nullable=False)
-    balance = db.Column(db.Float, nullable=False)
-    date = db.Column(db.DateTime, default=datetime.utcnow)
-
-    def __repr__(self):
-        return '<TestSignal %r>' % self.id
-
-
-# Signals for 1h
-class Signals1h(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    type = db.Column(db.String(10), nullable=False)
-    signal = db.Column(db.String(5), nullable=False)
-    price = db.Column(db.Float, nullable=False)
-    price_hight = db.Column(db.Float, nullable=False)
-    price_low = db.Column(db.Float, nullable=False)
-    balance = db.Column(db.Float, nullable=False)
-    date = db.Column(db.DateTime, default=datetime.utcnow)
-
-    def __repr__(self):
-        return '<TestSignal %r>' % self.id
-
+from app.database.database import Signals5m, Signals15m, Signals30m, Signals1h, db
 
 """
 Site pages
@@ -96,14 +16,27 @@ def index():
 
 
 # Signals Statistic page
-@app.route('/signals/stat', methods=['GET'])
-@app.route('/signals/stat/', methods=['GET'])
+@app.route('/signals/statistics', methods=['GET'])
+@app.route('/signals/statistics/', methods=['GET'])
 def index_signals_statistics():
     return render_template('signals_statistic.html',
-                           signals5m=Signals5m.query.order_by(TestSignal.date.desc()).all(),
-                           signals15m=Signals15m.query.order_by(TestSignal.date.desc()).all(),
-                           signals30m=Signals30m.query.order_by(TestSignal.date.desc()).all(),
-                           signals1h=Signals1h.query.order_by(TestSignal.date.desc()).all())
+                           signals5m=Signals5m.query.order_by(Signals5m.date.desc()).all(),
+                           signals15m=Signals15m.query.order_by(Signals15m.date.desc()).all(),
+                           signals30m=Signals30m.query.order_by(Signals30m.date.desc()).all(),
+                           signals1h=Signals1h.query.order_by(Signals1h.date.desc()).all())
+
+
+# Analytics page
+@app.route('/signals/analytics', methods=['GET'])
+@app.route('/signals/analytics/', methods=['GET'])
+def index_signals_analitycs():
+    return render_template('signals_analitycs.html',
+                           signal5m=Signals5m.query.order_by(Signals5m.date.desc()).first(),
+                           signal15m=Signals15m.query.order_by(Signals15m.date.desc()).first(),
+                           signal30m=Signals30m.query.order_by(Signals30m.date.desc()).first(),
+                           signal1h=Signals1h.query.order_by(Signals1h.date.desc()).first())
+
+
 # 5m Signals Page
 @app.route('/signals/5m', methods=['GET'])
 @app.route('/signals/5m/', methods=['GET'])
@@ -162,7 +95,7 @@ def webhook():
     global data
     if request.method == 'POST':
         try:
-            data = json.load(request.json)
+            data = request.json
         except:
             print('Cant load JSON data')
         if data['timeframe'] == '5m':
@@ -213,11 +146,3 @@ def webhook():
                 print('Error while adding 1h signal.')
                 print(error)
                 return abort(400)
-
-
-"""
-Starting Application
-Change debug=False before deploy
-"""
-if __name__ == '__main__':
-    app.run(debug=True)
