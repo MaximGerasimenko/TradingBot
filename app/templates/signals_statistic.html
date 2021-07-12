@@ -28,34 +28,257 @@
 		<section class="statictics">
 			<h3>Статистика теоретической торговли:</h3>
 			<br>
-			<h3>Начальный депозит: <b>50$</b></h3>
-			<h3>Торговое плечо: <b>x10</b></h3>
-			<br>
-			<h3>Депозит на данный момент: ХХХ</h3>
-			<h3>Прибыль: ХХХ</h3>
-			<h3>Прибыль в %: ХХХ%</h3>
-			<br>
-			<h3>Совершенно сделок: XXX</h3>
-			<h3>Прибыльных сделок: ХХХ</h3>
-			<h3>Убыточных сделок: ХХХ</h3>
-			<h3>% Прибыльных сделок: ХХХ%</h3>
-			<br>
-			<h3>Направление торговли в данный момент (1Ч): ЛОНГ</h3>
-			<h3>Последний сигнал (5м): ЛОНГ (СИСТЕМНЫЙ)</h3>
-			<br>
-			<h3>Текущая позиция: ЛОНГ</h3>
-			<h3>Цена входа: ХХХ</h3>
-			<h3>Время: ХХ:ХХ | xx.xx.xxxx</h3>
-			<br>
-			<br>
-			<h3>Последняя позиция: ЛОНГ</h3>
-			<h3>Цена входа: ХХХ</h3>
-			<h3>Цена выхода: ХХХ</h3>
-			<h3>Прибыль: ХХХ</h3>
-			<h3>Прибыль в %: ХХХ%</h3>
-			<h3>Время: ХХ:ХХ | xx.xx.xxxx</h3>
-			<br>
+				<table class="invisible_borders">
+						<tr>
+							<th></th>
+							<th></th>
+							<th></th>
+							<th></th>
+							<th></th>
+						</tr>
+						{% if deposit_info %}
+						<tr>
+							<td>Информация о депозите</td>
+						</tr>
+						<tr>
+							<td class="first"> Начальный депозит: </td>
+							<td> {{deposit_info.deposit_start}} $</td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td class="first"> Торговое плечо: </td>
+							<td> x{{deposit_info.trading_multiple}} </td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr style="height: 1rem">
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td class="first"> Депозит на данный момент: </td>
+							<td> {{deposit_info.deposit_current}} $</td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td class="first"> Прибыль: </td>
+							<td> {{deposit_info.profit}} $</td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td class="first"> Прибыль в процентах: </td>
+							<td> {{deposit_info.profit_percentage}} %</td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						{% else %}
+						<tr>
+							<td class="first"> ОШИБКА. Не могу загрузить данные портфеля </td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						{% endif %}
+						<tr><td><hr></td></tr>
+						<tr style="height: 1rem">
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						{% if statistics_info %}
+						<tr>
+							<td>Статистика сделок</td>
+						</tr>
+						<tr>
+							<td class="first"> Общее количество сделок: </td>
+							<td> {{statistics_info.count_trades}} </td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td class="first"> Прибыльные сделки: </td>
+							<td> {{statistics_info.count_profit_trades}} </td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td class="first"> Убыточные сделки: </td>
+							<td> {{statistics_info.count_lost_trades}} </td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td class="first"> Процент прибыльных сделок: </td>
+							<td> {{statistics_info.percent_profit_trades}} % </td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						{% else %}
+						<tr>
+							<td class="first"> ОШИБКА. Не могу загрузить данные сделок: </td>
+							<td> %%% </td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						{% endif %}
+						<tr><td><hr></td></tr>
+						<tr style="height: 1rem">
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						{% if current_position %}
+						<tr>
+							<td>Информация о настроящей открытой сделке</td>
+						</tr>
+						<tr>
+							<td class="first"> Направление торговли в данный момент (1Ч): </td>
+							{% if current_position.direction == 'short' %}<td class="bg_red">ШОРТ</td>{% elif current_position.direction == 'short' %}<td class="bg_green">ЛОНГ</td>{% else %}<td>Сделка не открыта</td>{% endif %}
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td class="first"> Депозит сделки: </td>
+							<td> {{current_position.deposit}} $</td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td class="first"> Депозит сделки с учётом торгового плеча: </td>
+							<td> {{current_position.deposit_with_multiple}} $</td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td class="first"> Количество купленных монет: </td>
+							<td> {{current_position.amount}} </td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td class="first"> Цена входа: </td>
+							<td> {{current_position.enter_price}} $</td>
+							<td></td>
+							<td>{{current_position.date.strftime('%H:%M')}}</td>
+							<td>{{current_position.date.strftime('%Y-%m-%d')}}</td>
+						</tr>
+
+						<tr style="height: 1rem">
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						{% else %}
+						<tr>
+							<td class="first"> ОШИБКА. Не могу загрузить данные открытой позиции: </td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						{% endif %}
+						<tr><td><hr></td></tr>
+						<tr style="height: 1rem">
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						{% if last_position %}
+						<tr>
+							<td>Информация о прошлой закрытой сделке</td>
+						</tr>
+						<tr>
+							<td class="first"> Направление сделки: </td>
+							{% if last_position.direction == 'short' %}<td class="bg_red">ШОРТ</td>{% elif last_position.direction == 'short' %}<td class="bg_green">ЛОНГ</td>{% else %}<td>Сделка не открыта</td>{% endif %}
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td class="first"> Цена входа: </td>
+							<td> {{last_position.enter_price}} $</td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td class="first"> Цена выхода: </td>
+							<td> {{last_position.exit_price}} $</td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td class="first"> Депозит: </td>
+							<td> {{last_position.deposit}} $</td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td class="first"> Профит: </td>
+							<td>{{last_position.profit}} $</td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td class="first"> Прибыль: </td>
+							<td> {{last_position.earnings}} $</td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td class="first"> Прибыль в процентах: </td>
+							<td> {{last_position.earnings_percentage}} %</td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						{% else %}
+						<tr>
+							<td class="first">Ошибка. Не могу загрузить данные последней закрытой сделки</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						{% endif %}
+						<tr><td><hr></td></tr>
+					</table>	
+					<br>
 			<h3>Сигнал для входа:</h3>
+			{% if enter_signal %}
 			<table>
 				<tr>
 					<th>ТИП</th>
@@ -67,39 +290,48 @@
 					<th>ДАТА</th>
 				</tr>
 				<tr>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
+					<td>{{enter_signal.type}}</td>
+					{% if enter_signal.signal == 'short' and enter_signal.balance > enter_signal.price %}<td class="bg_red">SHORT</td>{% elif enter_signal.signal == 'long' and enter_signal.balance <= enter_signal.price %}<td class="bg_green">LONG</td>{% else %}<td>Не системный.</td>{% endif %}
+					<td>{{enter_signal.price}}</td>
+					{% if enter_signal.signal == 'short' and enter_signal.balance > enter_signal.price %}<td class="bg_red">{{enter_signal.balance}}</td>{% elif enter_signal.signal == 'long' and enter_signal.balance <= enter_signal.price %}<td class="bg_green">{{enter_signal.balance}}</td>{% else %}<td>{{enter_signal.balance}}</td>{% endif %}
+					<td>{{enter_signal.price_low}}</td>
+					<td>{{enter_signal.price_hight}}</td>
+					<td>{{enter_signal.date.strftime('%H:%M | %Y-%m-%d')}}</td>
 				</tr>
 			</table>
+			{% else %}
+			Не могу загрузить данные сигнала для входа
+			{% endif %}
 			<br><hr><br>
 
 			<section class="signals_info">
 			<h3>Список всех закрытых позиций:</h3>
+			{% if closed_position_list|length > 0 %}
 			<table>
 				<tr>
 					<th>СИГНАЛ</th>
+					<th>ДЕПОЗИТ</th>
 					<th>ЦЕНА ВХОДА</th>
 					<th>ЦЕНА ВЫХОДА</th>
 					<th>ПРИБЫЛЬ</th>
 					<th>ПРИБЫЛЬ в %</th>
 					<th>ДАТА</th>
 				</tr>
-				{% for signal in signals %}
+				{% for position in closed_position_list %}
 					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
+						<td>{{position.direction}}</td>
+						<td>{{position.deposit}}</td>
+						<td>{{position.enter_price}}</td>
+						<td>{{position.exit_price}}</td>
+						<td>{{position.earnings}}</td>
+						<td>{{position.earnings_percentage}}</td>
+						<td>{{position.date.strftime('%H:%M | %Y-%m-%d')}}</td>
 					</tr>
 				{% endfor %}
 			</table>
+			{% else %}
+			У вас нет ни одной закрытой позиции. Подождите пока система не закроет хотя бы одну позицию
+			{% endif %}
 		</section>
 		</section>
 	</section>

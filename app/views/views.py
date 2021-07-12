@@ -3,7 +3,20 @@ from app import app
 from flask import request, abort, render_template
 from sqlalchemy.exc import SQLAlchemyError
 
-from app.database.database import Signals5m, Signals15m, Signals30m, Signals1h, db
+from app.database.database import Signals5m, Signals15m, Signals30m, Signals1h, db, DepositInfo, StatisticsInformation, \
+    CurrentPosition, LastPosition, ClosedPosition, EnterSignal
+import app.logic.statistics as statistics
+
+"""
+testing route
+"""
+# Main Root Page
+@app.route('/test', methods=['GET'])
+@app.route('/test/', methods=['GET'])
+def test():
+    print(EnterSignal.query.first())
+    return '<h1>Test</h1>'
+
 
 """
 Site pages
@@ -15,15 +28,25 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/signals/statistics/create_tables', methods=['GET'])
+@app.route('/signals/statistics/create_tables/', methods=['GET'])
+def statistics_create_table():
+    statistics.create_all_tables()
+    return '<h1>Done</h1>'
+
 # Signals Statistic page
 @app.route('/signals/statistics', methods=['GET'])
 @app.route('/signals/statistics/', methods=['GET'])
 def index_signals_statistics():
     return render_template('signals_statistic.html',
                            signals5m=Signals5m.query.order_by(Signals5m.date.desc()).all(),
-                           signals15m=Signals15m.query.order_by(Signals15m.date.desc()).all(),
-                           signals30m=Signals30m.query.order_by(Signals30m.date.desc()).all(),
-                           signals1h=Signals1h.query.order_by(Signals1h.date.desc()).all())
+                           signals1h=Signals1h.query.order_by(Signals1h.date.desc()).all(),
+                           deposit_info=DepositInfo.query.first(),
+                           statistics_info=StatisticsInformation.query.first(),
+                           current_position=CurrentPosition.query.first(),
+                           last_position=LastPosition.query.first(),
+                           enter_signal=EnterSignal.query.first(),
+                           closed_position_list=ClosedPosition.query.order_by(ClosedPosition.date.desc()).all())
 
 
 # Analytics page
@@ -128,6 +151,7 @@ def webhook():
                                           price=data['price'], price_hight=data['hight'], price_low=data['low'],
                                           balance=data['balance']))
                 db.session.commit()
+                statistics.analyse_trading_direction_by_signals_and_make_an_order()
                 return 'success', 200
             except SQLAlchemyError as e:
                 error = str(e.__dict__['orig'])

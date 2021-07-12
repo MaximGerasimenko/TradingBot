@@ -14,24 +14,92 @@
 				<section class="signal_analitycs">
 					<h2>Аналитика:</h2>
 
-					<h3>Неделя: %%%</h3>
-					<h3>Глобальное направление трейда (12Ч): %%%</h3>
-					<h3></h3>
-					<br>
-
-					<h3>1Ч Фильтр: %%%</h3>
-
-					<br>
-
-					<h3>Внутридневное направление трейда (1Ч): {%if signal1h.signal == 'short'%}<span class="bg_red">ШОРТ</span>{%else%}<span class="bg_green">ЛОНГ</span>{%endif%} {% if signal1h.signal == 'short' and signal1h.balance > signal1h.price %}<span class="bg_red">Cистемный</span>{% elif signal1h.signal == 'long' and signal1h.balance <= signal1h.price %}<span class="bg_green">Системный</span>{% else %}<span>Не системный.</span>{% endif %} | <span>{{signal1h.date.strftime('%H:%M | %Y-%m-%d')}}</span></h3>
-
-					<br>
-
-					<h3>Последний сигнал 30м: {%if signal30m.signal == 'short'%}<span class="bg_red">ШОРТ</span>{%else%}<span class="bg_green">ЛОНГ</span>{%endif%} {% if signal30m.signal == 'short' and signal30m.balance > signal30m.price %}<span class="bg_red">Cистемный</span>{% elif signal30m.signal == 'long' and signal30m.balance <= signal30m.price %}<span class="bg_green">Системный</span>{% else %}<span>Не системный.</span>{% endif %} | <span>{{signal30m.date.strftime('%H:%M | %Y-%m-%d')}}</h3>
-					<h3>Последний сигнал 15м: {%if signal15m.signal == 'short'%}<span class="bg_red">ШОРТ</span>{%else%}<span class="bg_green">ЛОНГ</span>{%endif%} {% if signal15m.signal == 'short' and signal15m.balance > signal15m.price %}<span class="bg_red">Cистемный</span>{% elif signal15m.signal == 'long' and signal15m.balance <= signal15m.price %}<span class="bg_green">Системный</span>{% else %}<span>Не системный.</span>{% endif %} | <span>{{signal15m.date.strftime('%H:%M | %Y-%m-%d')}}</h3>
-					<br>
-
-					<h3>Последний сигнал 5м: {%if signal5m.signal == 'short'%}<span class="bg_red">ШОРТ</span>{%else%}<span class="bg_red">ЛОНГ</span>{%endif%} {% if signal5m.signal == 'short' and signal5m.balance > signal5m.price %}<span class="bg_red">Cистемный</span>{% elif signal5m.signal == 'long' and signal5m.balance <= signal5m.price %}<span class="bg_green">Системный</span>{% else %}<span>Не системный.</span>{% endif %} | <span>{{signal5m.date.strftime('%H:%M | %Y-%m-%d')}}</h3>
+					<table class="invisible_borders">
+						<tr>
+							<th></th>
+							<th></th>
+							<th></th>
+							<th></th>
+							<th></th>
+						</tr>
+						<tr>
+							<td class="first"> Неделя: </td>
+							<td> %%% </td>
+							<td> %%% </td>
+							<td> ХХ:ХХ </td>
+							<td> хх.хх.хххх </td>
+						</tr>
+						<tr>
+							<td class="first"> Глобальное направление трейда (12Ч): </td>
+							<td> %%% </td>
+							<td> %%% </td>
+							<td> ХХ:ХХ </td>
+							<td> хх.хх.хххх </td>
+						</tr>
+						<tr style="height: 1rem">
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td class="first"> 1Ч Фильтр: </td>
+							<td> %%% </td>
+							<td> %%% </td>
+							<td> ХХ:ХХ </td>
+							<td> хх.хх.хххх </td>
+						</tr>
+						<tr style="height: 1rem">
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td class="first">Внутридневное направление трейда (1Ч):</td>
+							{%if signal1h.signal == 'short'%}<td class="bg_red">ШОРТ</td>{%else%}<td class="bg_green">ЛОНГ</td>{%endif%}
+							{% if signal1h.signal == 'short' and signal1h.balance > signal1h.price %}<td class="bg_red">Cистемный</td>{% elif signal1h.signal == 'long' and signal1h.balance <= signal1h.price %}<td class="bg_green">Системный</td>{% else %}<td>Не системный.</td>{% endif %} </td>
+							<td>{{signal1h.date.strftime('%H:%M')}}</td>
+							<td>{{signal1h.date.strftime('%Y-%m-%d')}}</td>
+						</tr>
+						<tr style="height: 1rem">
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td class="first"> Последний сигнал 30м: </td>
+							{%if signal30m.signal == 'short'%}<td class="bg_red">ШОРТ</td>{%else%}<td class="bg_green">ЛОНГ</td>{%endif%}
+							{% if signal30m.signal == 'short' and signal30m.balance > signal30m.price %}<td class="bg_red">Cистемный</td>{% elif signal30m.signal == 'long' and signal30m.balance <= signal30m.price %}<td class="bg_green">Системный</td>{% else %}<td>Не системный.</td>{% endif %}
+							<td>{{signal30m.date.strftime('%H:%M')}}</td>
+							<td>{{signal30m.date.strftime('%Y-%m-%d')}}</td>
+						</tr>
+						<tr>
+							<td class="first"> Последний сигнал 15м: </td>
+							{%if signal15m.signal == 'short'%}<td class="bg_red">ШОРТ</td>{%else%}<td class="bg_green">ЛОНГ</td>{%endif%}
+							{% if signal15m.signal == 'short' and signal15m.balance > signal15m.price %}<td class="bg_red">Cистемный</td>{% elif signal15m.signal == 'long' and signal15m.balance <= signal15m.price %}<td class="bg_green">Системный</td>{% else %}<td>Не системный.</td>{% endif %}
+							<td>{{signal15m.date.strftime('%H:%M')}}</td>
+							<td>{{signal15m.date.strftime('%Y-%m-%d')}}</td>
+						</tr>
+						<tr style="height: 1rem">
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td class="first"> Последний сигнал 5м: </td>
+							{%if signal5m.signal == 'short'%}<td class="bg_red">ШОРТ</td>{%else%}<td class="bg_red">ЛОНГ</td>{%endif%}
+							{% if signal5m.signal == 'short' and signal5m.balance > signal5m.price %}<td class="bg_red">Cистемный</td>{% elif signal5m.signal == 'long' and signal5m.balance <= signal5m.price %}<td class="bg_green">Системный</td>{% else %}<td>Не системный.</td>{% endif %}
+							<td>{{signal5m.date.strftime('%H:%M')}}</td>
+							<td>{{signal5m.date.strftime('%Y-%m-%d')}}</td>
+						</tr>
+					</table>
 				</section>
 
 				<br><br>

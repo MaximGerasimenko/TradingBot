@@ -12,3 +12,4 @@ db = SQLAlchemy(app)
 
 from app.database import database
 from app.views import views
+from app.logic import statistics
