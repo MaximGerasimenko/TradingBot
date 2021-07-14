@@ -1,3 +1,5 @@
+import json
+
 from app import app
 
 from flask import request, abort, render_template
@@ -14,7 +16,7 @@ testing route
 @app.route('/test', methods=['GET'])
 @app.route('/test/', methods=['GET'])
 def test():
-    print(EnterSignal.query.first())
+    #statistics.empty_all_tables()
     return '<h1>Test</h1>'
 
 
@@ -27,6 +29,12 @@ Site pages
 def index():
     return render_template('index.html')
 
+
+@app.route('/signals/statistics/clear', methods=['GET'])
+@app.route('/signals/statistics/clear/', methods=['GET'])
+def statistics_clear_tables():
+    statistics.empty_all_tables()
+    return '<h1>Cleared</h1>'
 
 @app.route('/signals/statistics/create_tables', methods=['GET'])
 @app.route('/signals/statistics/create_tables/', methods=['GET'])
