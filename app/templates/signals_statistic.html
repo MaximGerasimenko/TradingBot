@@ -63,21 +63,21 @@
 						</tr>
 						<tr>
 							<td class="first"> Депозит на данный момент: </td>
-							<td> {{deposit_info.deposit_current}} $</td>
+							<td> {{deposit_info.deposit_current|round(2)}} $</td>
 							<td></td>
 							<td></td>
 							<td></td>
 						</tr>
 						<tr>
 							<td class="first"> Прибыль: </td>
-							<td> {{deposit_info.profit}} $</td>
+							<td> {{deposit_info.profit|round(2)}} $</td>
 							<td></td>
 							<td></td>
 							<td></td>
 						</tr>
 						<tr>
 							<td class="first"> Прибыль в процентах: </td>
-							<td> {{deposit_info.profit_percentage}} %</td>
+							<td> {{deposit_info.profit_percentage|round(2)}} %</td>
 							<td></td>
 							<td></td>
 							<td></td>
@@ -126,7 +126,7 @@
 						</tr>
 						<tr>
 							<td class="first"> Процент прибыльных сделок: </td>
-							<td> {{statistics_info.percent_profit_trades}} % </td>
+							<td> {{statistics_info.percent_profit_trades|round(2)}} % </td>
 							<td></td>
 							<td></td>
 							<td></td>
@@ -161,21 +161,21 @@
 						</tr>
 						<tr>
 							<td class="first"> Депозит сделки: </td>
-							<td> {{current_position.deposit}} $</td>
+							<td> {{current_position.deposit|round(2)}} $</td>
 							<td></td>
 							<td></td>
 							<td></td>
 						</tr>
 						<tr>
 							<td class="first"> Депозит сделки с учётом торгового плеча: </td>
-							<td> {{current_position.deposit_with_multiple}} $</td>
+							<td> {{current_position.deposit_with_multiple|round(2)}} $</td>
 							<td></td>
 							<td></td>
 							<td></td>
 						</tr>
 						<tr>
 							<td class="first"> Количество купленных монет: </td>
-							<td> {{current_position.amount}} </td>
+							<td> {{current_position.amount|round(8)}} </td>
 							<td></td>
 							<td></td>
 							<td></td>
@@ -239,28 +239,28 @@
 						</tr>
 						<tr>
 							<td class="first"> Депозит: </td>
-							<td> {{last_position.deposit}} $</td>
+							<td> {{last_position.deposit|round(2)}} $</td>
 							<td></td>
 							<td></td>
 							<td></td>
 						</tr>
 						<tr>
 							<td class="first"> Профит: </td>
-							<td>{{last_position.profit}} $</td>
+							<td>{{last_position.profit|round(2)}} $</td>
 							<td></td>
 							<td></td>
 							<td></td>
 						</tr>
 						<tr>
 							<td class="first"> Прибыль: </td>
-							<td> {{last_position.earnings}} $</td>
+							<td> {{last_position.earnings|round(2)}} $</td>
 							<td></td>
 							<td></td>
 							<td></td>
 						</tr>
 						<tr>
 							<td class="first"> Прибыль в процентах: </td>
-							<td> {{last_position.earnings_percentage}} %</td>
+							<td> {{last_position.earnings_percentage|round(2)}} %</td>
 							<td></td>
 							<td></td>
 							<td></td>
@@ -293,7 +293,7 @@
 					<td>{{enter_signal.type}}</td>
 					{% if enter_signal.signal == 'short' and enter_signal.balance > enter_signal.price %}<td class="bg_red">SHORT</td>{% elif enter_signal.signal == 'long' and enter_signal.balance <= enter_signal.price %}<td class="bg_green">LONG</td>{% else %}<td>Не системный.</td>{% endif %}
 					<td>{{enter_signal.price}}</td>
-					{% if enter_signal.signal == 'short' and enter_signal.balance > enter_signal.price %}<td class="bg_red">{{enter_signal.balance}}</td>{% elif enter_signal.signal == 'long' and enter_signal.balance <= enter_signal.price %}<td class="bg_green">{{enter_signal.balance}}</td>{% else %}<td>{{enter_signal.balance}}</td>{% endif %}
+					{% if enter_signal.signal == 'short' and enter_signal.balance > enter_signal.price %}<td class="bg_red">{{enter_signal.balance|round(2)}}</td>{% elif enter_signal.signal == 'long' and enter_signal.balance <= enter_signal.price %}<td class="bg_green">{{enter_signal.balance|round(2)}}</td>{% else %}<td>{{enter_signal.balance|round(2)}}</td>{% endif %}
 					<td>{{enter_signal.price_low}}</td>
 					<td>{{enter_signal.price_hight}}</td>
 					<td>{{enter_signal.date.strftime('%H:%M | %Y-%m-%d')}}</td>
@@ -319,12 +319,12 @@
 				</tr>
 				{% for position in closed_position_list %}
 					<tr>
-						<td>{{position.direction}}</td>
-						<td>{{position.deposit}}</td>
+						{% if position.direction == 'short' %}<td class="bg_red">{{position.direction}}</td>{% elif position.direction == 'long' %}<td class="bg_green">{{position.direction}}</td>{% endif %}
+						<td>{{position.deposit|round(2)}}</td>
 						<td>{{position.enter_price}}</td>
 						<td>{{position.exit_price}}</td>
-						<td>{{position.earnings}}</td>
-						<td>{{position.earnings_percentage}}</td>
+						{% if position.earnings > 0 %}<td class="bg_green">{{position.earnings|round(2)}}</td>{% elif position.earnings <= 0 %}<td class="bg_red">{{position.earnings|round(2)}}</td>{% endif %}
+						{% if position.earnings_percentage > 0 %}<td class="bg_green">{{position.earnings_percentage|round(2)}} %</td>{% elif position.earnings_percentage <= 0 %}<td class="bg_red">{{position.earnings_percentage|round(2)}} %</td>{% endif %}
 						<td>{{position.date.strftime('%H:%M | %Y-%m-%d')}}</td>
 					</tr>
 				{% endfor %}

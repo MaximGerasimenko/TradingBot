@@ -101,14 +101,27 @@ class TestSignal(db.Model):
 
 
 # Signals for 5m
+class Balance_Signal(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    balance = db.Column(db.Float, nullable=True)
+    price = db.Column(db.Float, nullable=True)
+    price_hight = db.Column(db.Float, nullable=True)
+    price_low = db.Column(db.Float, nullable=True)
+    date = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return '<Balance_Signal %r>' % self.id
+
+
+# Signals for 5m
 class Signals5m(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    type = db.Column(db.String(10), nullable=False)
-    signal = db.Column(db.String(5), nullable=False)
-    price = db.Column(db.Float, nullable=False)
-    price_hight = db.Column(db.Float, nullable=False)
-    price_low = db.Column(db.Float, nullable=False)
-    balance = db.Column(db.Float, nullable=False)
+    type = db.Column(db.String(10), nullable=True)
+    signal = db.Column(db.String(5), nullable=True)
+    rop = db.column(db.Float, nullable=True)
+    price = db.Column(db.Float, nullable=True)
+    price_hight = db.Column(db.Float, nullable=True)
+    price_low = db.Column(db.Float, nullable=True)
     date = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
@@ -118,12 +131,13 @@ class Signals5m(db.Model):
 # Signals for 15m
 class Signals15m(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    type = db.Column(db.String(10), nullable=False)
-    signal = db.Column(db.String(5), nullable=False)
-    price = db.Column(db.Float, nullable=False)
-    price_hight = db.Column(db.Float, nullable=False)
-    price_low = db.Column(db.Float, nullable=False)
-    balance = db.Column(db.Float, nullable=False)
+    type = db.Column(db.String(10), nullable=True)
+    signal = db.Column(db.String(5), nullable=True)
+    rop = db.column(db.Float, nullable=True)
+    price = db.Column(db.Float, nullable=True)
+    price_hight = db.Column(db.Float, nullable=True)
+    price_low = db.Column(db.Float, nullable=True)
+    balance = db.Column(db.Float, nullable=True)
     date = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
@@ -133,12 +147,13 @@ class Signals15m(db.Model):
 # Signals for 30m
 class Signals30m(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    type = db.Column(db.String(10), nullable=False)
-    signal = db.Column(db.String(5), nullable=False)
-    price = db.Column(db.Float, nullable=False)
-    price_hight = db.Column(db.Float, nullable=False)
-    price_low = db.Column(db.Float, nullable=False)
-    balance = db.Column(db.Float, nullable=False)
+    type = db.Column(db.String(10), nullable=True)
+    signal = db.Column(db.String(5), nullable=True)
+    rop = db.column(db.Float, nullable=True)
+    price = db.Column(db.Float, nullable=True)
+    price_hight = db.Column(db.Float, nullable=True)
+    price_low = db.Column(db.Float, nullable=True)
+    balance = db.Column(db.Float, nullable=True)
     date = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
@@ -148,14 +163,50 @@ class Signals30m(db.Model):
 # Signals for 1h
 class Signals1h(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    type = db.Column(db.String(10), nullable=False)
-    signal = db.Column(db.String(5), nullable=False)
-    price = db.Column(db.Float, nullable=False)
-    price_hight = db.Column(db.Float, nullable=False)
-    price_low = db.Column(db.Float, nullable=False)
-    balance = db.Column(db.Float, nullable=False)
+    type = db.Column(db.String(10), nullable=True)
+    signal = db.Column(db.String(5), nullable=True)
+    rop = db.column(db.Float, nullable=True)
+    price = db.Column(db.Float, nullable=True)
+    price_hight = db.Column(db.Float, nullable=True)
+    price_low = db.Column(db.Float, nullable=True)
+    balance = db.Column(db.Float, nullable=True)
     date = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
         return '<Signals1h %r>' % self.id
 
+
+# Analitics 5m
+class Analitics5m(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    decision = db.Column(db.String(10), nullable=True)
+
+    def __repr__(self):
+        return '<Analitics5m %r>' % self.decision
+
+
+# Analitics 15m
+class Analitics15m(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    decision = db.Column(db.String(10), nullable=True)
+
+    def __repr__(self):
+        return '<Analitics15m %r>' % self.decision
+
+
+# Analitics 30m
+class Analitics30m(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    decision = db.Column(db.String(10), nullable=True)
+
+    def __repr__(self):
+        return '<Analitics30m %r>' % self.decision
+
+
+# Analitics 1h
+class Analitics1h(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    decision = db.Column(db.String(10), nullable=True)
+
+    def __repr__(self):
+        return '<Analitics1h %r>' % self.decision

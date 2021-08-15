@@ -1,7 +1,7 @@
 from app import app
 
 """
-Starting Application
+Starting Applicationываываыв
 Change debug=False before deploy
 """
 if __name__ == '__main__':

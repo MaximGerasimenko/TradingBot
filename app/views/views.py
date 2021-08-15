@@ -17,6 +17,10 @@ testing route
 @app.route('/test/', methods=['GET'])
 def test():
     #statistics.empty_all_tables()
+    d = ClosedPosition.query.first()
+    d.earnings *= 10
+    d.earnings_percentage *= 10
+    db.session.commit()
     return '<h1>Test</h1>'
 
 
@@ -135,6 +139,7 @@ def webhook():
                                          price=data['price'], price_hight=data['hight'], price_low=data['low'],
                                          balance=data['balance']))
                 db.session.commit()
+                statistics.analyse_trading_direction_by_signals_and_make_an_order()
                 return 'success', 200
             except SQLAlchemyError as e:
                 error = str(e.__dict__['orig'])
@@ -159,7 +164,6 @@ def webhook():
                                           price=data['price'], price_hight=data['hight'], price_low=data['low'],
                                           balance=data['balance']))
                 db.session.commit()
-                statistics.analyse_trading_direction_by_signals_and_make_an_order()
                 return 'success', 200
             except SQLAlchemyError as e:
                 error = str(e.__dict__['orig'])

@@ -1,5 +1,5 @@
 from app.database.database import db, Signals5m, Signals1h, \
-    DepositInfo, StatisticsInformation, CurrentPosition, LastPosition, ClosedPosition, EnterSignal
+    DepositInfo, StatisticsInformation, CurrentPosition, LastPosition, ClosedPosition, EnterSignal, Balance_Signal
 
 
 class Decision:
@@ -29,6 +29,9 @@ def create_all_tables():
         db.session.commit()
     if EnterSignal.query.first() is None:
         db.session.add(EnterSignal(type='RSI', signal='long', price=0.0, price_hight=0.0, price_low=0.0, balance=0.0))
+        db.session.commit()
+    if Balance_Signal.query.first() is None:
+        db.session.add(EnterSignal(balance=0.0, price=0.0, price_hight=0.0, price_low=0.0))
         db.session.commit()
 
 
@@ -169,19 +172,18 @@ def close_current_position(dec_5m):
     if current_position.direction == 'long':
         last_position.direction = current_position.direction
         last_position.deposit = current_position.deposit
-        last_position.profit = (current_position.amount * (
-                    dec_5m.price - current_position.enter_price)) / deposit_info.trading_multiple
-        last_position.earnings = last_position.profit - last_position.deposit
+        last_position.earnings = (current_position.amount * (
+                    dec_5m.price - current_position.enter_price)) * deposit_info.trading_multiple
+        last_position.profit = last_position.deposit + last_position.earnings
         last_position.earnings_percentage = (last_position.earnings / last_position.deposit) * 100
         last_position.enter_price = current_position.enter_price
         last_position.exit_price = dec_5m.price
     elif current_position.direction == 'short':
         last_position.direction = current_position.direction
         last_position.deposit = current_position.deposit
-        # last_position.profit = (current_position.amount * dec_5m.price) / deposit_info.trading_multiple
-        last_position.profit = (current_position.amount * (
-                    current_position.enter_price - dec_5m.price)) / deposit_info.trading_multiple
-        last_position.earnings = last_position.profit - last_position.deposit
+        last_position.earnings = (current_position.amount * (
+                    current_position.enter_price - dec_5m.price)) * deposit_info.trading_multiple
+        last_position.profit = last_position.deposit + last_position.earnings
         last_position.earnings_percentage = (last_position.earnings / last_position.deposit) * 100
         last_position.enter_price = current_position.enter_price
         last_position.exit_price = dec_5m.price
@@ -270,4 +272,4 @@ def analyse_trading_direction_by_signals_and_make_an_order():
     else:
         print(
             'ERROR:: CANT DECIDE ABOUT POSITION NEED TO UPDATE: current_position.direction: ' + current_position.direction
-            + ', 5m_dir: ' + dec_5m.direction + '5m_bal' + dec_5m.balance + ', 5m_decision: ' + dec_5m.decision + ', 1h_dir: ' + dec_1h.direction)
+            + ', 5m_dir: ' + dec_5m.direction + '5m_bal: ' + dec_5m.balance + ', 5m_decision: ' + dec_5m.decision + ', 1h_dir: ' + dec_1h.direction)
